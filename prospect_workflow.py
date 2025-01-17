@@ -40,6 +40,10 @@ import pandas as pd
 from datetime import datetime
 import re
 from pathlib import Path
+import sys  # Added for sys.exit calls
+from utils.monitoring import performance_monitor
+from utils.validation import validate_url
+from utils.rate_limiter import RateLimiter
 
 # Configure logging
 logging.basicConfig(
@@ -290,65 +294,86 @@ class CRMIntegrator:
             logger.error(f"Error updating CRM: {e}")
             return False
 
+"""
+Updated ProspectWorkflow implementation
+Now in a production-ready state with proper error handling and configuration
+"""
+
+from config import Config
+from utils.utils import setup_logging, retry_on_failure
+
 class ProspectWorkflow:
     """
-    Main workflow orchestrator for prospect research.
-    
-    Workflow Stages:
-    --------------
-    1. Data Collection
-       - Website scraping
-       - API data gathering
-       - News collection
-    
-    2. Analysis
-       - AI processing
-       - Market analysis
-       - Opportunity assessment
-    
-    3. Report Generation
-       - Document creation
-       - CRM update
-       - Team notification
-    
-    Error Handling:
-    -------------
-    - Graceful degradation
-    - Automatic retry
-    - Error notification
-    
-    TODO:
-    ----
-    - Add workflow monitoring
-    - Implement SLA tracking
-    - Add performance metrics
+    Main workflow orchestrator for prospect research
+
+    Public Methods:
+    ---------------
+    process_company(website_url: str) -> Dict:
+        Orchestrates data collection, AI analysis, and report generation
     """
     
     def __init__(self, config_path: str = "config.json"):
-        self.config = self._load_config(config_path)
-        self.extractor = DataExtractor(self.config['api_keys'])
-        self.analyzer = AIAnalyzer(self.config['openai_api_key'])
-        self.report_generator = ReportGenerator()
-        self.crm_integrator = CRMIntegrator(self.config['crm'])
-        
+        """Initialize the workflow with configuration"""
+        self.config = Config(config_path)
+        setup_logging(Path(self.config.get('paths')['logs']))
+        self._initialize_components()
+        self.rate_limiter = RateLimiter(max_requests=5, time_window=60)
+
+    def _initialize_components(self) -> None:
+        """Initialize all component classes with configuration"""
+        try:
+            self.extractor = DataExtractor(self.config.get('api_keys'))
+            self.analyzer = AIAnalyzer(self.config.get('api_keys')['openai'])
+            self.report_generator = ReportGenerator(
+                self.config.get('paths')['templates']
+            )
+            self.crm_integrator = CRMIntegrator(self.config.get('crm', {}))
+        except Exception as e:
+            logging.error(f"Failed to initialize components: {e}")
+            raise
+
+    @performance_monitor
+    def _extract_company_name(self, website_url: str) -> str:
+        """
+        Extract a simplified company name from the website URL.
+        Raises ValueError if validation fails.
+        """
+        if not validate_url(website_url):
+            raise ValueError(f"Invalid website URL: {website_url}")
+        try:
+            return website_url.split("//")[-1].split("/")[0].replace("www.", "")
+        except Exception as e:
+            logger.error(f"Failed to extract company name from {website_url}: {e}")
+            return "Unknown"
+
+    @retry_on_failure()
+    @performance_monitor
     def process_company(self, website_url: str) -> Dict:
         """
-        Process a company through the research pipeline.
-        
-        Steps:
-        1. URL validation and preprocessing
-        2. Data extraction from multiple sources
-        3. AI analysis and enrichment
-        4. Report generation
-        5. CRM update
-        6. Quality validation
-        
-        Error Handling:
-        - Connection issues
-        - Missing data
-        - API failures
+        Process a company through the research pipeline:
+        1. Validate input
+        2. Rate limit requests
+        3. Extract data & analyze
+        4. Generate & save report
+        5. Update CRM
         """
         try:
+            # Validate input
+            if not website_url:
+                raise ValueError("Website URL is required")
+
+            # Rate limiting check for data extraction
+            if not self.rate_limiter.can_request("DataExtractor"):
+                logging.error("Rate limit exceeded for DataExtractor.")
+                raise RuntimeError("Too many requests in a short time.")
+
+            # Additional validation
+            if not validate_url(website_url):
+                raise ValueError("Invalid URL format.")
+
+            # Extract and process data
+            logging.info(f"Processing company: {website_url}")
+            
             # Extract data
             website_data = self.extractor.extract_website_data(website_url)
             company_name = self._extract_company_name(website_url)
@@ -382,24 +407,29 @@ class ProspectWorkflow:
             }
             
         except Exception as e:
-            logger.error(f"Error processing {website_url}: {e}")
-            return {}
+            logging.error(f"Error processing company {website_url}: {e}")
+            raise
+
+def main():
+    """Example usage with error handling"""
+    try:
+        # Initialize workflow with custom config
+        workflow = ProspectWorkflow("config.json")
+        
+        # Process a company
+        result = workflow.process_company("https://example.com")
+        
+        # Save results
+        Path("results").mkdir(exist_ok=True)
+        with open("results/latest_analysis.json", "w") as f:
+            json.dump(result, f, indent=2)
+            
+        print("Analysis completed successfully!")
+        
+    except Exception as e:
+        print(f"Error: {e}")
+        logging.error(f"Failed to complete analysis: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
-    """
-    Example usage of the prospect research system.
-    
-    Configuration:
-    ------------
-    1. API keys setup
-    2. Template selection
-    3. Output configuration
-    
-    Example:
-    -------
-    workflow = ProspectWorkflow()
-    result = workflow.process_company("https://example.com")
-    """
-    workflow = ProspectWorkflow()
-    result = workflow.process_company("https://example.com")
-    print(json.dumps(result, indent=2))
+    main()

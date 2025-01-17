@@ -1,173 +1,177 @@
-# AI Prospect Research System
-![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)
-![License](https://img.shields.io/badge/license-MIT-green)
-![Status](https://img.shields.io/badge/status-production--ready-brightgreen)
+# Enterprise AI Prospect Research System 🔎
 
-> An enterprise-grade automation system that transforms company research using AI and web intelligence.
+[![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
+[![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-brightgreen)](https://openai.com/)
+[![Code Style](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Type Checking](https://img.shields.io/badge/type%20checking-mypy-brightgreen)](https://github.com/python/mypy)
+[![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue)](docs/)
 
-## Table of Contents
+> Enterprise-grade AI-powered system for automated company research and analysis, combining web intelligence with GPT-4 capabilities.
+
+## 📚 Table of Contents
 - [Overview](#overview)
-- [Features](#features)
-- [Technical Stack](#technical-stack)
+- [System Architecture](#system-architecture)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Components](#components)
 - [Configuration](#configuration)
-- [Architecture](#architecture)
-- [Best Practices](#best-practices)
 - [Documentation](#documentation)
+- [Changelog](#changelog)
 - [Contributing](#contributing)
-- [Support](#support)
 
-## Overview
+## 🎯 Overview
 
-Transform your sales team's research workflow with our AI-powered prospect analysis system. Automatically extract, analyze, and generate comprehensive company profiles from just a website URL.
+This system transforms company research through AI-powered automation, providing comprehensive analysis from multiple data sources. Perfect for sales teams, investors, and business analysts.
 
-### Key Features
-- 🤖 Advanced AI Analysis (GPT-4)
-- 🌐 Multi-source Data Integration
-- 📊 Intelligent Market Analysis
-- 📋 Automated Report Generation
-- 🔄 CRM Integration
-- ⚡ Concurrent Processing
+### Core Capabilities
+- 🤖 GPT-4 powered analysis
+- 🌐 Multi-source data integration
+- 📊 Automated market analysis
+- 📋 Rich report generation
+- 🔄 CRM system integration
+- ⚡ High-performance processing
 
-## Technical Stack
+## 🏗️ System Architecture
 
-### Core Technologies
-- Python 3.8+
-- OpenAI GPT-4
-- BeautifulSoup4
-- Concurrent Processing
+### Data Collection Layer (`DataExtractor` class)
+- Web scraping with rate limiting
+- API integrations (LinkedIn, Crunchbase)
+- News & social media aggregation
+- Error recovery mechanisms
 
-### Data Sources
-- Company Websites
-- LinkedIn API
-- Crunchbase API
-- News APIs
+### AI Analysis Layer (`AIAnalyzer` class)
+- Company profile generation
+- Market position assessment
+- Growth opportunity identification
+- Risk analysis computation
 
-### Integrations
-- CRM Systems
-- Reporting Tools
-- Notification Systems
+### Report Generation Layer (`ReportGenerator` class)
+- Structured report creation
+- Visual analytics
+- CRM data integration
+- PDF/HTML export options
 
-## Installation
+## 🛠️ Installation
 
 ```bash
-# Clone the repository
-git clone https://github.com/username/ai-prospect-research.git
+# Clone repository
+git clone https://github.com/YanCotta/ai-prospect-research.git
 cd ai-prospect-research
+
+# Create virtual environment
+python -m venv venv
+source venv/bin/activate  # Unix
+# or
+.\venv\Scripts\activate  # Windows
 
 # Install dependencies
 pip install -r requirements.txt
 
-# Configure your API keys
+# Configure API keys
 cp config.example.json config.json
+# Edit config.json with your API keys
+
 ```
-
-## Usage
-
-```python
+## 💻 Usage
 from prospect_workflow import ProspectWorkflow
 
-# Initialize the workflow
+### Initialize with configuration
 workflow = ProspectWorkflow(config_path="config.json")
 
-# Analyze a company
+### Analyze company
 result = workflow.process_company("https://example.com")
 
-# Generate report
-print(result['profile'])
-```
+### Access results
+print(f"Company Profile: {result['profile']}")
+print(f"Market Analysis: {result['analysis']}")
+print(f"Report Path: {result['report_path']}")
 
-## Configuration
+## 🔧 Components
+### 1. Data Extraction (DataExtractor)
+- Intelligent web scraping
+- Rate limiting & caching
+- Multi-source data aggregation
+- Error handling & recovery
 
-```json
+### 2. AI Analysis (AIAnalyzer)
+- GPT-4 integration
+- Market analysis
+- Trend identification
+- Risk assessment
+
+### 3. Report Generation (ReportGenerator)
+- Customizable templates
+- Multi-format export
+- Visual analytics
+- CRM integration
+
+## ⚙️ Configuration
+Configuration is managed through config.json:
 {
     "api_keys": {
         "openai": "your-key",
         "linkedin": "your-key",
         "crunchbase": "your-key"
     },
-    "crm": {
-        "type": "salesforce",
-        "credentials": {
-            "api_key": "your-key"
-        }
+    "settings": {
+        "retry_attempts": 3,
+        "cache_enabled": true
     }
 }
-```
 
-## Architecture
+## 📅 Changelog
 
-### Data Collection Layer
-- Intelligent web scraping
-- API data enrichment
-- News aggregation
-- Social media metrics
+### Version 1.0.0 (2024-12)
+- Initial release with core functionality
+- GPT-4 integration
+- Multi-source data collection
+- Report generation system
+- CRM integration capabilities
 
-### AI Analysis Layer
-- Company profile generation
-- Market position assessment
-- Growth opportunity identification
-- Risk analysis
+### Version 1.1.0 (2025-01)
+- Enhanced error handling
+- Additional data sources
+- Improved visualization
+- Performance optimizations
 
-### Report Generation Layer
-- Executive summaries
-- Detailed analysis
-- Visual metrics
-- CRM integration
+### Version 1.2.0 (2025-1)
+- ✅ Added error boundary checks and robust exception handling
+- ✅ Introduced comprehensive input validation
+- 🏷️ Implemented type hints across major modules
+- 📢 Enhanced logging messages for better traceability
+- 📈 Added performance monitoring decorators (utils.monitoring)
+- 🚦 Implemented rate limiting (utils.rate_limiter)
+- 🧪 Expanded unit tests for all components (see /tests)
+- 🗎 Documented all public methods with docstrings
+- 🔄 Added optional cleanup routines (temp file handling, etc.)
+- 🩹 Fixed minor bugs in URL extraction and config loading
 
-```mermaid
-graph TD
-    A[Website URL] --> B[Data Collector]
-    B --> C[AI Analyzer]
-    C --> D[Report Generator]
-    D --> E[CRM Integration]
-```
+## 🤝 Contributing
+I welcome contributions! Please see my Contributing Guide for:
 
-## Best Practices
+- Code style guidelines
+- Development setup
+- Testing requirements
+- PR process
 
-### API Usage
-- Implement rate limiting
-- Handle throttling gracefully
-- Cache responses appropriately
+## 📚 Documentation
+Detailed documentation available in /docs:
 
-### Error Handling
-- Graceful degradation
-- Comprehensive logging
-- Automatic retry mechanisms
+- API Reference
+- Configuration Guide
+- Development Guide
+- Testing Guide
 
-## Documentation
+## 📬 Contact 
+Author: Yan Cotta
+Email: yanpcotta@gmail.com
+LinkedIn: Yan Cotta
+Issues: GitHub Issues
 
-Detailed documentation is available in the `/docs` directory:
-- [API Reference](docs/api.md)
-- [Configuration Guide](docs/config.md)
-- [Development Guide](docs/development.md)
+## 📜 License
+This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Roadmap
+Built with ❤️ by Yan Cotta
 
-- [ ] Add sentiment analysis
-- [ ] Implement competitor comparison
-- [ ] Add industry benchmarking
-- [ ] Enhance visual reporting
-- [ ] Add real-time monitoring
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch
-3. Commit your changes
-4. Push to the branch
-5. Create a Pull Request
-
-## Support
-
-- **Documentation:** [Full Documentation](docs/index.md)
-- **Issues:** [GitHub Issues](https://github.com/username/ai-prospect-research/issues)
-- **Email:** yanpcotta@gmail.com
-
-## Acknowledgments
-
-- OpenAI for GPT-4 API
-- Beautiful Soup contributors
-- Python community
 
