@@ -135,7 +135,7 @@ Configuration is managed through config.json:
 - Improved visualization
 - Performance optimizations
 
-### Version 1.2.0 (2025-1)
+### Version 1.3.0 (Current)
 - ✅ Added error boundary checks and robust exception handling
 - ✅ Introduced comprehensive input validation
 - 🏷️ Implemented type hints across major modules
@@ -146,6 +146,13 @@ Configuration is managed through config.json:
 - 🗎 Documented all public methods with docstrings
 - 🔄 Added optional cleanup routines (temp file handling, etc.)
 - 🩹 Fixed minor bugs in URL extraction and config loading
+
+### Version 2.0.0
+- Add model validation and performance metrics 
+- Implement A/B testing framework 
+- Add data preprocessing pipeline 
+- Include model versioning 
+- Add automated model retraining pipeline 
 
 ## 🤝 Contributing
 I welcome contributions! Please see my Contributing Guide for:

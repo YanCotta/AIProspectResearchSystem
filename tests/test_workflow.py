@@ -4,12 +4,30 @@ import unittest
 from unittest.mock import Mock, patch
 from pathlib import Path
 import sys
+import pytest
 
 # Add parent directory to path
 sys.path.append(str(Path(__file__).parent.parent))
 
-from prospect_workflow import ProspectWorkflow, CompanyData
+class TestProspectWorkflow:
+    @pytest.fixture
+    def mock_openai_response(self):
+        return {
+            "choices": [{
+                "message": {"content": json.dumps({
+                    "market_position": "leader",
+                    "risk_score": 0.7
+                })}
+            }]
+        }
+    
+    @patch('openai.OpenAI')
+    def test_ai_analysis(self, mock_openai, mock_openai_response):
+        mock_openai.return_value.chat.completions.create.return_value = mock_openai_response
+        result = self.workflow.process_company("https://example.com")
+        assert "market_position" in result["analysis"]
 
+    @patch('openai.OpenAI')
 class TestProspectWorkflow(unittest.TestCase):
     """Test cases for ProspectWorkflow"""
     
