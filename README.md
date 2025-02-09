@@ -1,4 +1,6 @@
-# Enterprise AI Prospect Research System 🔎
+# 🔍 Enterprise AI Prospect Research System
+
+<div align="center">
 
 [![Python Version](https://img.shields.io/badge/python-3.8%2B-blue)](https://www.python.org/)
 [![OpenAI](https://img.shields.io/badge/OpenAI-GPT--4-brightgreen)](https://openai.com/)
@@ -7,30 +9,44 @@
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](docs/)
 
-> Enterprise-grade AI-powered system for automated company research and analysis, combining web intelligence with GPT-4 capabilities.
+<p align="center">
+<strong>Enterprise-grade AI-powered system for automated company research and analysis, combining web intelligence with GPT-4 capabilities.</strong>
+</p>
 
-## 📚 Table of Contents
-- [Overview](#overview)
-- [System Architecture](#system-architecture)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Components](#components)
-- [Configuration](#configuration)
-- [Documentation](#documentation)
-- [Changelog](#changelog)
-- [Contributing](#contributing)
+</div>
+
+---
+
+## 🗂️ Quick Navigation
+
+- [🎯 Overview](#-overview)
+- [🏗️ System Architecture](#️-system-architecture)
+- [⚡ Quick Start](#-quick-start)
+- [🛠️ Installation](#️-installation)
+- [💻 Usage](#-usage)
+- [🔧 Components](#-components)
+- [⚙️ Configuration](#️-configuration)
+- [📅 Changelog](#-changelog)
+- [🤝 Contributing](#-contributing)
+
+---
 
 ## 🎯 Overview
 
-This system transforms company research through AI-powered automation, providing comprehensive analysis from multiple data sources. Perfect for sales teams, investors, and business analysts.
+Transform your company research workflow with our AI-powered automation system. Perfect for:
+- 📊 Sales Teams
+- 💼 Investors
+- 📈 Business Analysts
 
-### Core Capabilities
-- 🤖 GPT-4 powered analysis
-- 🌐 Multi-source data integration
-- 📊 Automated market analysis
-- 📋 Rich report generation
-- 🔄 CRM system integration
-- ⚡ High-performance processing
+### ✨ Core Capabilities
+- 🤖 GPT-4 powered intelligent analysis
+- 🌐 Comprehensive multi-source data integration
+- 📊 Advanced market analysis automation
+- 📋 Professional report generation
+- 🔄 Seamless CRM system integration
+- ⚡ Enterprise-grade performance
+
+---
 
 ## 🏗️ System Architecture
 
@@ -52,8 +68,31 @@ This system transforms company research through AI-powered automation, providing
 - CRM data integration
 - PDF/HTML export options
 
+---
+
+## ⚡ Quick Start
+
+```bash
+# 1. Install the package
+pip install ai-prospect-research
+
+# 2. Set up your configuration
+cp config.example.json config.json
+# Edit your API keys in config.json
+
+# 3. Start analyzing
+python -m prospect_research analyze --company "example.com"
+```
+
 ## 🛠️ Installation
 
+### Prerequisites
+- Python 3.8 or higher
+- pip package manager
+- Virtual environment tool
+- Valid API keys for OpenAI, LinkedIn, and Crunchbase
+
+### Setup Steps
 ```bash
 # Clone repository
 git clone https://github.com/YanCotta/ai-prospect-research.git
@@ -71,8 +110,8 @@ pip install -r requirements.txt
 # Configure API keys
 cp config.example.json config.json
 # Edit config.json with your API keys
-
 ```
+
 ## 💻 Usage
 from prospect_workflow import ProspectWorkflow
 
@@ -107,7 +146,10 @@ print(f"Report Path: {result['report_path']}")
 - CRM integration
 
 ## ⚙️ Configuration
-Configuration is managed through config.json:
+
+Your `config.json` should look like this:
+
+```json
 {
     "api_keys": {
         "openai": "your-key",
@@ -116,9 +158,18 @@ Configuration is managed through config.json:
     },
     "settings": {
         "retry_attempts": 3,
-        "cache_enabled": true
+        "cache_enabled": true,
+        "rate_limit": {
+            "requests_per_minute": 60,
+            "burst_limit": 10
+        },
+        "reporting": {
+            "format": "pdf",
+            "template": "enterprise"
+        }
     }
 }
+```
 
 ## 📅 Changelog
 
@@ -170,11 +221,19 @@ Detailed documentation available in /docs:
 - Development Guide
 - Testing Guide
 
-## 📬 Contact 
-Author: Yan Cotta
-Email: yanpcotta@gmail.com
-LinkedIn: Yan Cotta
-Issues: GitHub Issues
+---
+
+<div align="center">
+
+### 📬 Connect & Contribute
+
+[![GitHub Issues](https://img.shields.io/github/issues/YanCotta/ai-prospect-research)](https://github.com/YanCotta/ai-prospect-research/issues)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Yan_Cotta-blue)](https://linkedin.com/in/yan-cotta)
+[![Email](https://img.shields.io/badge/Email-yanpcotta%40gmail.com-red)](mailto:yanpcotta@gmail.com)
+
+**Built with ❤️ by Yan Cotta**
+
+</div>
 
 ## 📜 License
 This project is licensed under the MIT License - see the LICENSE file for details.
